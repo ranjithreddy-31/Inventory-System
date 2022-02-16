@@ -98,10 +98,8 @@ def showOpenInvoices():
         query = f'select * from invoiceDetails where isClosed=0 order by dateOfPurchase;'
         cursor.execute(query)
         results = cursor.fetchall()
-        x = PrettyTable()
-        x.field_names = [i[0] for i in cursor.description]
-        for row in results:
-            x.add_row(list(row))
+        for result in results:
+            print(result)
         connection.close()
     except Exception as e:
         print(f'Failed fetching invoices with exception: {e}')
@@ -113,11 +111,8 @@ def showClosedInvoices():
         query = f'select * from invoiceDetails where isClosed =1 order by totalPrice desc;'
         cursor.execute(query)
         results = cursor.fetchall()
-        print(results)
-        x = PrettyTable()
-        x.field_names = [i[0] for i in cursor.description]
-        for row in results:
-            x.add_row(list(row))
+        for result in results:
+            print(result) 
         connection.close()
     except Exception as e:
         print(f'Failed fetching invoices with exception: {e}')
@@ -148,6 +143,4 @@ def displayMenu():
 def salesDetails():
     print("Sales and Invoices")
     displayMenu()
-
 salesDetails()
-

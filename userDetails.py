@@ -54,4 +54,4 @@ def userDetails():
     print("User Registration")
     displayMenu()
 
-userDetails()
+
