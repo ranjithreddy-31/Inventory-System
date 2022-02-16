@@ -44,6 +44,8 @@ def generateInvoice():
     except Exception as e:
         print(f'Invoice generating failed with exception: {e}.')
         connection.close()
+    finally:
+        displayMenu()
 
 def payInstallment():
     invoice_id = int(input('Enter invoice Id: '))
@@ -75,6 +77,8 @@ def payInstallment():
         connection.close()
     except Exception as e:
         print(f'Payment process failed with exeption:{e}')
+    finally:
+        displayMenu()
 
 def closeInvoice(invoice_id = None):
     if not invoice_id:
@@ -90,6 +94,8 @@ def closeInvoice(invoice_id = None):
         connection.close()
     except Exception as e:
         print(f'Failed closing invoice with exception: {e}')
+    finally:
+        displayMenu()
 
 def showOpenInvoices():
     try:
@@ -98,11 +104,18 @@ def showOpenInvoices():
         query = f'select * from invoiceDetails where isClosed=0 order by dateOfPurchase;'
         cursor.execute(query)
         results = cursor.fetchall()
+
+        x = PrettyTable()
+
+        x.field_names = ["Invoice ID", "Name", "ZIP", "Tax Rate", "Item", "Selling Price", "Delivery Charge", "Total Cost", "Date of Purchase", "Is Invoice closed"]
         for result in results:
-            print(result)
+            x.add_row(list(result))
+        print(x.get_string())
         connection.close()
     except Exception as e:
         print(f'Failed fetching invoices with exception: {e}')
+    finally:
+        displayMenu()
 
 def showClosedInvoices():
     try:
@@ -111,14 +124,17 @@ def showClosedInvoices():
         query = f'select * from invoiceDetails where isClosed =1 order by totalPrice desc;'
         cursor.execute(query)
         results = cursor.fetchall()
+        x = PrettyTable()
+        x.field_names = ["Invoice ID", "Name", "ZIP", "Tax Rate", "Item", "Selling Price", "Delivery Charge", "Total Cost", "Date of Purchase", "Is Invoice closed"]
         for result in results:
-            print(result) 
+            x.add_row(list(result))
+        print(x.get_string())
         connection.close()
     except Exception as e:
         print(f'Failed fetching invoices with exception: {e}')
-            
+    finally:
+        displayMenu()
 def displayMenu():
-    print('Welcome to Sales and Invoices module.')
     print('1. Generate an invoice')
     print('2. Pay an installment')
     print('3. Show open invoices')
@@ -141,6 +157,5 @@ def displayMenu():
 
 
 def salesDetails():
-    print("Sales and Invoices")
+    print('Welcome to Sales and Invoices module.')
     displayMenu()
-salesDetails()
