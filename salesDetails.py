@@ -71,13 +71,16 @@ def payInstallment():
             cursor.execute(query)
             cursor.commit()
         else:
-            closeInvoice()
+            closeInvoice(invoice_id)
         connection.close()
     except Exception as e:
         print(f'Payment process failed with exeption:{e}')
 
-def closeInvoice():
-    invoice_id = int(input('Enter invoice Id: '))
+def closeInvoice(invoice_id = None):
+    if not invoice_id:
+        invoice_id = int(input('Enter invoice Id: '))
+    else:
+        invoice_id = invoice_id
     try:
         connection = getConnection()
         cursor = connection.cursor()
