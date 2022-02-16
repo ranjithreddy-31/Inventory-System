@@ -1,4 +1,5 @@
-import pyodbc 
+import pyodbc
+
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
                           'Server=DESKTOP-VU4ECPI;'
@@ -7,7 +8,7 @@ def getConnection():
     return conn
 
 def displayMenu():
-    choice = int(input('Choose an option:\n 1. Add new Customer\n 2. Get Customer Details\n 3. Delete Customer Details'))
+    choice = int(input('Choose an option:\n 1. SqlScriptsAdd new Customer\n 2. Get Customer Details\n 3. Delete Customer Details'))
     connection = getConnection()
     cursor = connection.cursor()
     if choice == 1:
@@ -43,7 +44,6 @@ def displayMenu():
             customer_id = int(input('Enter customer ID: '))
             cursor.execute(f'delete from customerDetails where customerID = {customer_id};')
             cursor.commit()
-            print(results[0])
         except Exception as e:
             print(f'Failed to fetch customer details with exception: {e}')  
     connection.close() 

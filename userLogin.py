@@ -12,16 +12,16 @@ def getConnection():
                           'Trusted_Connection=yes;')
     return conn
 
-def getPassword():
-    
+
+def getPassword(password):
     conn = getConnection()
     cur = conn.cursor()
 
     try:
         cur.execute("select password from userDetails")
         result = list(cur.fetchall())
-        if result[0][0] == 'sample':
-            print("Success")
+        if result[0][0] == password:
+            print(result[0][0])
             return "Success"
         else:
             return "Incorrect"
@@ -29,6 +29,54 @@ def getPassword():
     except Exception as e:
         print(e)
     conn.close()
+
+
+
+def getEmail(email):
+    conn = pyodbc.connect('Driver={SQL Server};'
+                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
+                          'Database=praneeth;'
+                          'Trusted_Connection=yes;')
+    cur = conn.cursor()
+
+    try:
+        cur.execute("select email from userDetails")
+        result = list(cur.fetchall())
+        if result[0][0] == email:
+            return "Success"
+        else:
+            return "Incorrect"
+
+    except Exception as e:
+        print(e)
+    conn.close()
+
+
+def updatePassword(newPassword):
+    conn = pyodbc.connect('Driver={SQL Server};'
+                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
+                          'Database=praneeth;'
+                          'Trusted_Connection=yes;')
+    cur = conn.cursor()
+
+    try:
+        cur.execute(f"update userDetails set password = '{newPassword}' where name = 'Testuser'")
+        print("Password updated successfully")
+    except Exception as e:
+        print(e)
+    conn.commit()
+    conn.close()
+
+
+def resetPassword():
+    enter_registered_email = input("Enter your registered email: ")
+    if getEmail(enter_registered_email) == "Success":
+        new_password = input("Enter the new password: ")
+        confirm_password = input("Reenter to confirm password: ")
+        if new_password == confirm_password:
+            updatePassword(new_password)
+        else:
+            print("Passwords didn't match")
 
 
 def displayMenu():
@@ -53,10 +101,18 @@ def displayMenu():
     return "exit"
 
 
-password = input("Welcome ! Enter your password to continue: ")
-if getPassword() == "Success":
-    if displayMenu() == "exit":
-        print("Thank you!")
-
+password = input("Welcome! Enter your password to continue or Press 1 to quit: ")
+if password == '1':
+    print("Thank you")
 else:
-    print("Incorrect password")
+    if getPassword(password) == "Success":
+        if displayMenu() == "exit":
+            print("Thank you!")
+    else:
+        print("Incorrect password")
+        isReset = input("Do you want to reset the password? Yes/No: ")
+        if isReset.lower() == "yes":
+            resetPassword()
+        else:
+            print("Try again by entering the correct password!")
+
