@@ -5,23 +5,22 @@ from wareHouse import *
 
 import pyodbc
 
+
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-VU4ECPI;'
+                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
                           'Database=praneeth;'
                           'Trusted_Connection=yes;')
-    return conn
+    cur = conn.cursor()
+    return cur, conn
 
 
 def getPassword(password):
-    conn = getConnection()
-    cur = conn.cursor()
-
+    cur, conn = getConnection()
     try:
         cur.execute("select password from userDetails")
         result = list(cur.fetchall())
         if result[0][0] == password:
-            print(result[0][0])
             return "Success"
         else:
             return "Incorrect"
@@ -31,14 +30,8 @@ def getPassword(password):
     conn.close()
 
 
-
 def getEmail(email):
-    conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
-                          'Database=praneeth;'
-                          'Trusted_Connection=yes;')
-    cur = conn.cursor()
-
+    cur, conn = getConnection()
     try:
         cur.execute("select email from userDetails")
         result = list(cur.fetchall())
@@ -53,12 +46,7 @@ def getEmail(email):
 
 
 def updatePassword(newPassword):
-    conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
-                          'Database=praneeth;'
-                          'Trusted_Connection=yes;')
-    cur = conn.cursor()
-
+    cur, conn = getConnection()
     try:
         cur.execute(f"update userDetails set password = '{newPassword}' where name = 'Testuser'")
         print("Password updated successfully")
@@ -101,7 +89,9 @@ def displayMenu():
     return "exit"
 
 
-password = input("Welcome! Enter your password to continue or Press 1 to quit: ")
+password = input("                   Welcome! \n"
+                 "Enter your password to continue or Press 1 to quit: ")
+
 if password == '1':
     print("Thank you")
 else:
@@ -115,4 +105,3 @@ else:
             resetPassword()
         else:
             print("Try again by entering the correct password!")
-

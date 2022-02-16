@@ -2,6 +2,15 @@ import pyodbc
 from prettytable import PrettyTable
 
 
+def getConnection():
+    conn = pyodbc.connect('Driver={SQL Server};'
+                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
+                          'Database=praneeth;'
+                          'Trusted_Connection=yes;')
+    cur = conn.cursor()
+    return cur, conn
+
+
 def addItem():
     showItems()
     item_name = input("Choose 1 to add Tv's or choose 2 to add Stereo: ")
@@ -20,15 +29,12 @@ def addItem():
 
 
 def incrementItem(id):
-    conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
-                          'Database=praneeth;'
-                          'Trusted_Connection=yes;')
-    cur = conn.cursor()
+    cur, conn = getConnection()
 
     try:
-        cur.execute(f"update products set product_quantity = product_quantity + 1 where product_id = {id}")
-        print("Product added successfully")
+        quantity = int(input("Enter the number of items: "))
+        cur.execute(f"update products set product_quantity = product_quantity + {quantity} where product_id = {id}")
+        print("Products added successfully")
     except Exception as e:
         print(e)
     conn.commit()
@@ -36,12 +42,7 @@ def incrementItem(id):
 
 
 def showItems():
-    conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
-                          'Database=praneeth;'
-                          'Trusted_Connection=yes;')
-    cur = conn.cursor()
-
+    cur, conn = getConnection()
     try:
         cur.execute("select * from products")
         results = cur.fetchall()
@@ -58,11 +59,7 @@ def showItems():
 
 
 def showItemsLessthanFive():
-    conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
-                          'Database=praneeth;'
-                          'Trusted_Connection=yes;')
-    cur = conn.cursor()
+    cur, conn = getConnection()
 
     try:
         cur.execute("select  product_name, sum(product_quantity) as total_quantity from products group by "
@@ -80,9 +77,8 @@ def showItemsLessthanFive():
     conn.close()
 
 
-
 def quantityOfItems():
-    pass
+    showItems()
 
 
 def wareHouse():

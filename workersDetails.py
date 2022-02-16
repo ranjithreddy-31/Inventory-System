@@ -1,13 +1,16 @@
 import pyodbc
 from prettytable import PrettyTable
 
-
-def showWorkerDetails():
+def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
                           'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
                           'Database=praneeth;'
                           'Trusted_Connection=yes;')
     cur = conn.cursor()
+    return cur, conn
+
+def showWorkerDetails():
+    cur, conn = getConnection()
 
     try:
         cur.execute("select * from salesPersonDetails")
@@ -28,11 +31,7 @@ def updateCommission():
     showWorkerDetails()
     userId = input("Choose person id whose commission percentage need to be updated: ")
     newPercentage = input("Enter the new commission percentage: ")
-    conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
-                          'Database=praneeth;'
-                          'Trusted_Connection=yes;')
-    cur = conn.cursor()
+    cur, conn = getConnection()
 
     try:
         cur.execute(f"update salesPersonDetails set commission_earned = {newPercentage} where person_id = {float(userId)}")
