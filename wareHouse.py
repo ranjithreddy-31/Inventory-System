@@ -82,12 +82,16 @@ def quantityOfItems():
 
 
 def wareHouse():
+    print()
+    print()
     print("Warehouse deails")
     print("1.Add item to inventory")
     print("2.Show product details")
     print("3.Show products less than or equal to 5")
     print("4.Show quantity of each product by warehouse")
     print("Press any other key to exit to main menu")
+    print()
+    print()
     ware_house_input = int(input("Enter the number based on the operation that you want to perform: "))
     if ware_house_input == 1:
         addItem()
