@@ -4,6 +4,7 @@ from userDetails import *
 from wareHouse import *
 
 import pyodbc
+
 import re
 
 regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
@@ -20,6 +21,20 @@ def getConnection():
 
 def getPassword(password):
     cur, conn = getConnection()
+
+
+def getConnection():
+    conn = pyodbc.connect('Driver={SQL Server};'
+                          'Server=DESKTOP-VU4ECPI;'
+                          'Database=praneeth;'
+                          'Trusted_Connection=yes;')
+    return conn
+
+
+def getPassword(password):
+    conn = getConnection()
+    cur = conn.cursor()
+
     try:
         cur.execute("select password from userDetails")
         result = list(cur.fetchall())
@@ -31,6 +46,7 @@ def getPassword(password):
     except Exception as e:
         print(e)
     conn.close()
+
 
 
 def getEmail(email):
@@ -59,6 +75,7 @@ def updatePassword(newPassword):
         print(e)
     conn.commit()
     conn.close()
+
 
 
 def isValid(email):
@@ -107,6 +124,7 @@ def displayMenu():
     print("3.Sales and Invoices")
     print("4.User Registration")
     print("5.Quit")
+
     print()
     print()
     workflowNumber = int(input("Enter the number to navigate: "))
@@ -141,3 +159,4 @@ else:
             resetPassword()
         else:
             print("Try again later by entering the correct password!")
+
