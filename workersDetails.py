@@ -1,5 +1,7 @@
+from commonFunctions import *
 import pyodbc
 from prettytable import PrettyTable
+
 
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
