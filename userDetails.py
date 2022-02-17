@@ -2,15 +2,15 @@ import pyodbc
 
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-VU4ECPI;'
+                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
                           'Database=praneeth;'
                           'Trusted_Connection=yes;')
-    return conn
+    cur = conn.cursor()
+    return cur, conn
 
 def displayMenu():
     choice = int(input('Choose an option:\n 1. SqlScriptsAdd new Customer\n 2. Get Customer Details\n 3. Delete Customer Details'))
-    connection = getConnection()
-    cursor = connection.cursor()
+    cursor, conn = getConnection()
     if choice == 1:
         try:
             cursor.execute('select max(customerID) from customerDetails;')
@@ -46,7 +46,7 @@ def displayMenu():
             cursor.commit()
         except Exception as e:
             print(f'Failed to fetch customer details with exception: {e}')  
-    connection.close() 
+    conn.close()
             
 
 

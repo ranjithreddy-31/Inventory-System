@@ -1,17 +1,18 @@
 from datetime import datetime
 import pyodbc 
 from prettytable import PrettyTable
+
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-VU4ECPI;'
+                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
                           'Database=praneeth;'
                           'Trusted_Connection=yes;')
-    return conn
+    cur = conn.cursor()
+    return cur, conn
 
 def generateInvoice():
     customer_id = int(input('Please enter customer ID: '))
-    connection = getConnection()
-    cursor = connection.cursor()
+    cursor, conn = getConnection()
 
     try: 
         cursor.execute(f"select * from customerDetails where customerID = {customer_id};")
@@ -49,9 +50,10 @@ def generateInvoice():
             print('Invoice has been generated successfully')
     except Exception as e:
         print(f'Invoice generating failed with exception: {e}.')
-        connection.close()
+        conn.close()
     finally:
         displayMenu()
+
 
 def payInstallment():
     invoice_id = int(input('Enter invoice Id: '))
@@ -100,8 +102,7 @@ def closeInvoice(invoice_id = None):
     else:
         invoice_id = invoice_id
     try:
-        connection = getConnection()
-        cursor = connection.cursor()
+        cursor, connection = getConnection()
         query = f'update invoiceDetails set isClosed = 1 where id = {invoice_id};'
         cursor.execute(query)
         cursor.commit()
@@ -114,8 +115,7 @@ def closeInvoice(invoice_id = None):
 
 def showOpenInvoices():
     try:
-        connection = getConnection()
-        cursor = connection.cursor()
+        cursor, connection = getConnection()
         query = f'select * from invoiceDetails where isClosed=0 order by dateOfPurchase;'
         cursor.execute(query)
         results = cursor.fetchall()
@@ -134,8 +134,7 @@ def showOpenInvoices():
 
 def showClosedInvoices():
     try:
-        connection = getConnection()
-        cursor = connection.cursor()
+        cursor, connection = getConnection()
         query = f'select * from invoiceDetails where isClosed =1 order by totalPrice desc;'
         cursor.execute(query)
         results = cursor.fetchall()
