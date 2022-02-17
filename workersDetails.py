@@ -1,4 +1,4 @@
-from commonFunctions import *
+import commonFunctions
 import pyodbc
 from prettytable import PrettyTable
 
@@ -10,6 +10,7 @@ def getConnection():
                           'Trusted_Connection=yes;')
     cur = conn.cursor()
     return cur, conn
+
 
 def showWorkerDetails():
     cur, conn = getConnection()
@@ -27,34 +28,63 @@ def showWorkerDetails():
         print(e)
     conn.commit()
     conn.close()
+    workerDetails()
+
+
+def checkUserExists(id):
+    cur, conn = getConnection()
+    try:
+        cur.execute(f"select 1 from salesPersonDetails where person_id = {id}")
+        results = cur.fetchall()
+        conn.commit()
+        conn.close()
+        if len(results) > 0:
+            return True
+        return False
+    except Exception as e:
+        print(e)
+        conn.commit()
+        conn.close()
 
 
 def updateCommission():
-    showWorkerDetails()
     userId = input("Choose person id whose commission percentage need to be updated: ")
-    newPercentage = input("Enter the new commission percentage: ")
-    cur, conn = getConnection()
+    if checkUserExists(userId):
+        newPercentage = input("Enter the new commission percentage: ")
+        cur, conn = getConnection()
+        try:
+            cur.execute(
+                f"update salesPersonDetails set commission_earned = {newPercentage} where person_id = {float(userId)}")
+            print("Successfully updated new percentage")
 
-    try:
-        cur.execute(f"update salesPersonDetails set commission_earned = {newPercentage} where person_id = {float(userId)}")
-        print("Successfully updated new percentage")
-
-    except Exception as e:
-        print(e)
-    conn.commit()
-    conn.close()
+        except Exception as e:
+            print(e)
+        conn.commit()
+        conn.close()
+        workerDetails()
+    else:
+        print("User with that particular id doesn't exist.\n")
+        userInput = input("Press 1 to enter the userId again or any other key to go back: ")
+        if userInput == '1':
+            updateCommission()
+        else:
+            workerDetails()
 
 
 def workerDetails():
+    print()
+    print()
     print("Salespersons deails")
     print("1.Show workers details")
     print("2.Update commission percentage")
     print("Press any other key to exit to main menu")
-    ware_house_input = int(input("Enter the number based on the operation that you want to perform: "))
-    if ware_house_input == 1:
+    print()
+    print()
+    ware_house_input = input("Enter the number based on the operation that you want to perform: ")
+    if ware_house_input == '1':
         showWorkerDetails()
-    elif ware_house_input == 2:
+    elif ware_house_input == '2':
         updateCommission()
     else:
-        # displayMenu()
-        pass
+        commonFunctions.displayMenu()
+

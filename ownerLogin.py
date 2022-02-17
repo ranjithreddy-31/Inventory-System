@@ -1,10 +1,9 @@
-from salesDetails import *
 from workersDetails import *
 from userDetails import *
 from wareHouse import *
+from salesDetails import *
 
 import pyodbc
-
 import re
 
 regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
@@ -21,20 +20,6 @@ def getConnection():
 
 def getPassword(password):
     cur, conn = getConnection()
-
-
-def getConnection():
-    conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-VU4ECPI;'
-                          'Database=praneeth;'
-                          'Trusted_Connection=yes;')
-    return conn
-
-
-def getPassword(password):
-    conn = getConnection()
-    cur = conn.cursor()
-
     try:
         cur.execute("select password from userDetails")
         result = list(cur.fetchall())
@@ -69,12 +54,11 @@ def updatePassword(newPassword):
     try:
         cur.execute(f"update userDetails set password = '{newPassword}' where name = 'Testuser'")
         print("Password updated successfully\n")
-        if displayMenu() == "exit":
-            print("Thank you!")
     except Exception as e:
         print(e)
     conn.commit()
     conn.close()
+    startProgram()
 
 
 
@@ -82,7 +66,7 @@ def isValid(email):
     if re.fullmatch(regex, email):
         return True
     else:
-        print("Invalid email !!!")
+        print("Invalid email format!!!")
         return False
 
 
@@ -114,7 +98,7 @@ def resetPassword():
         if trychoice == '1':
             resetPassword()
         else:
-            print("\n Bye Bye! See you later")
+            print("\nBye Bye! See you later")
 
 
 def displayMenu():
@@ -141,22 +125,26 @@ def displayMenu():
         return "exit"
     return "exit"
 
+def startProgram():
+    password = input("                   Welcome! \n"
+                     "Enter your password to continue or Press 1 to quit: ")
 
-password = input("                   Welcome! \n"
-                 "Enter your password to continue or Press 1 to quit: ")
-
-if password == '1':
-    print("Thank you")
-else:
-    if getPassword(password) == "Success":
-        if displayMenu() == "exit":
-            print("Thank you!")
+    if password == '1':
+        print("Thank you")
     else:
-        print("Incorrect password\n")
-        isReset = input("Do you want to reset the password? \nPress 1 to retry or"
-                        " Press any other other key to quit: ")
-        if isReset.lower() == "1":
-            resetPassword()
+        passwordStatus = getPassword(password)
+        if passwordStatus == "Success":
+            menuStatus = displayMenu()
+            if menuStatus == "exit":
+                print("Thank you!")
         else:
-            print("Try again later by entering the correct password!")
+            print("Incorrect password\n")
+            isReset = input("Do you want to reset the password? \nPress 1 to reset or"
+                            " Press any other other key to quit: ")
+            if isReset.lower() == "1":
+                resetPassword()
+            else:
+                print("Try again later by entering the correct password!")
+
+startProgram()
 

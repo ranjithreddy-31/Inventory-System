@@ -1,8 +1,7 @@
+from workersDetails import *
 from wareHouse import *
 from salesDetails import *
-from workersDetails import *
 from userDetails import *
-
 
 
 def displayMenu():

@@ -1,4 +1,4 @@
-from commonFunctions import *
+import commonFunctions
 import pyodbc
 from prettytable import PrettyTable
 
@@ -13,33 +13,33 @@ def getConnection():
 
 
 def addItem():
-    showItems()
-    item_name = input("Choose 1 to add Tv's or choose 2 to add Stereo: ")
+    item_name = input("\nChoose 1 to add Tv's or choose 2 to add Stereo: ")
     ware_house_number = input("Choose 1 to add in warehouse 1 or choose 2 to add in warehouse 2: ")
+    print()
     if item_name == '1' and ware_house_number == '1':
-        confirmation = input(f"You are adding Tv's in warehouse {ware_house_number}. \n If you are sure press 1 to "
-                             f"confirm or other key to choose again")
+        confirmation = input(f"You are adding Tv's in warehouse {ware_house_number}. \nIf you are sure press 1 to "
+                             f"confirm or other key to choose again: ")
         if confirmation == '1':
             incrementItem(2)
         else:
             addItem()
     elif item_name == '2' and ware_house_number == '1':
-        confirmation = input(f"You are adding Stereos in warehouse {ware_house_number}. \n If you are sure press 1 to "
-                             f"confirm or other key to choose again")
+        confirmation = input(f"You are adding Stereos in warehouse {ware_house_number}. \nIf you are sure press 1 to "
+                             f"confirm or other key to choose again: ")
         if confirmation == '1':
             incrementItem(1)
         else:
             addItem()
     elif item_name == '1' and ware_house_number == '2':
-        confirmation = input(f"You are adding Tv's in warehouse {ware_house_number}. \n If you are sure press 1 to "
-                             f"confirm or other key to choose again")
+        confirmation = input(f"You are adding Tv's in warehouse {ware_house_number}. \nIf you are sure press 1 to "
+                             f"confirm or other key to choose again: ")
         if confirmation == '1':
             incrementItem(4)
         else:
             addItem()
     elif item_name == '2' and ware_house_number == '2':
-        confirmation = input(f"You are adding Stereos in warehouse {ware_house_number}. \n If you are sure press 1 to "
-                             f"confirm or other key to choose again")
+        confirmation = input(f"You are adding Stereos in warehouse {ware_house_number}. \nIf you are sure press 1 to "
+                             f"confirm or other key to choose again: ")
         if confirmation == '1':
             incrementItem(3)
         else:
@@ -57,7 +57,6 @@ def incrementItem(id):
         quantity = int(input("Enter the number of items: "))
         cur.execute(f"update products set product_quantity = product_quantity + {quantity} where product_id = {id}")
         print("Products added successfully")
-        wareHouse()
     except Exception as e:
         print(e)
     conn.commit()
@@ -99,6 +98,7 @@ def showItemsLessthanFive():
         print(e)
     conn.commit()
     conn.close()
+    wareHouse()
 
 
 def quantityOfItems():
@@ -126,4 +126,4 @@ def wareHouse():
     elif ware_house_input == '4':
         quantityOfItems()
     else:
-        displayMenu()
+        commonFunctions.displayMenu()

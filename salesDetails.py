@@ -58,8 +58,7 @@ def generateInvoice():
 def payInstallment():
     invoice_id = int(input('Enter invoice Id: '))
     try:
-        connection = getConnection()
-        cursor = connection.cursor()
+        cursor, conn = getConnection()
         query = f'select totalPrice,dateOfPurchase from invoiceDetails where id = {invoice_id} and isClosed=0;'
         cursor.execute(query)
         result = cursor.fetchall()
@@ -90,7 +89,7 @@ def payInstallment():
             cursor.commit()
         else:
             closeInvoice(invoice_id)
-        connection.close()
+        conn.close()
     except Exception as e:
         print(f'Payment process failed with exeption:{e}')
     finally:
@@ -148,6 +147,7 @@ def showClosedInvoices():
         print(f'Failed fetching invoices with exception: {e}')
     finally:
         displayMenu()
+
 def displayMenu():
     print('1. Generate an invoice')
     print('2. Pay an installment')
