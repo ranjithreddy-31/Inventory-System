@@ -108,7 +108,6 @@ def displayMenu():
     print("3.Sales and Invoices")
     print("4.User Registration")
     print("5.Quit")
-
     print()
     print()
     workflowNumber = int(input("Enter the number to navigate: "))
