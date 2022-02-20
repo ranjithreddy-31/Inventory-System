@@ -2,7 +2,7 @@ import commonFunctions
 from datetime import datetime
 import pyodbc
 from prettytable import PrettyTable
-
+import userDetails
 
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
@@ -23,6 +23,7 @@ def generateInvoice():
 
         if not result:
             print('Customer has not registered yet. Please register before generating an invoice')
+            userDetails.displayMenu()
             return
         else:
             item_choice = int(input('Select the item of you choice:\n1. Tv\n2. Stereo\n'))
@@ -72,17 +73,17 @@ def payInstallment():
 
     try:
         cursor, conn = getConnection()
-        query = f'select id from invoiceDetails where id = {invoice_id} and isClosed=0;'
+        query = f'select id from invoiceDetails where id = {invoice_id};'
         cursor.execute(query)
         result = cursor.fetchall()
-        if not result[0][0]:
+        if not result:
             print('Invalid Invoice ID :(, Please try again')
             salesdisplayMenu()
             return
         query = f'select totalPrice,dateOfPurchase from invoiceDetails where id = {invoice_id} and isClosed=0;'
         cursor.execute(query)
         result = cursor.fetchall()
-        if not result[0][0]:
+        if not result:
             print('Invoice is closed !!')
             return
         total_price = result[0][0]
@@ -205,6 +206,7 @@ def salesdisplayMenu():
     elif option == 4:
         showClosedInvoices()
     else:
+        print('I am here')
         return commonFunctions.displayMenu()
     return "exit"
 
