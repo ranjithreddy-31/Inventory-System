@@ -6,7 +6,7 @@ from prettytable import PrettyTable
 
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
+                          'Server=DESKTOP-VU4ECPI;'
                           'Database=praneeth;'
                           'Trusted_Connection=yes;')
     cur = conn.cursor()
@@ -26,7 +26,14 @@ def generateInvoice():
             return
         else:
             item_choice = int(input('Select the item of you choice:\n1. Tv\n2. Stereo\n'))
-            item_name = 'Tv' if item_choice == 1 else 'Stereos'
+            if item_choice == 1:
+                item_name = 'Tv' 
+            elif item_choice == 2:
+                item_name = 'Stereos'
+            else:
+                print('Choose a valid option')
+                salesdisplayMenu()
+                return
             query = f"select product_warehouse,product_quantity from products where product_name = '{item_name}'  and " \
                     f"product_quantity = (select max(product_quantity) from products where product_" \
                     f"name = '{item_name}') "
@@ -62,8 +69,16 @@ def generateInvoice():
 
 def payInstallment():
     invoice_id = int(input('Enter invoice Id: '))
+
     try:
         cursor, conn = getConnection()
+        query = f'select id from invoiceDetails where id = {invoice_id} and isClosed=0;'
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if not result[0][0]:
+            print('Invalid Invoice ID :(, Please try again')
+            salesdisplayMenu()
+            return
         query = f'select totalPrice,dateOfPurchase from invoiceDetails where id = {invoice_id} and isClosed=0;'
         cursor.execute(query)
         result = cursor.fetchall()
@@ -93,7 +108,7 @@ def payInstallment():
             cursor.execute(query)
             cursor.commit()
         else:
-            closeInvoice(invoice_id)
+            closeInvoice(invoice_id, cursor)
         conn.close()
     except Exception as e:
         print(f'Payment process failed with exeption:{e}')
@@ -101,9 +116,19 @@ def payInstallment():
         salesdisplayMenu()
 
 
-def closeInvoice(invoice_id=None):
+def closeInvoice(invoice_id=None, cursor = None):
     if not invoice_id:
+        if not cursor:
+            cursor, conn = getConnection()
         invoice_id = int(input('Enter invoice Id: '))
+        query = f'select id from invoiceDetails where id = {invoice_id} and isClosed=0;'
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if not result[0][0]:
+            print('Invalid Invoice ID :(, Please try again')
+            salesd
+            salesdisplayMenu()
+            return
     else:
         invoice_id = invoice_id
     try:
@@ -187,4 +212,7 @@ def salesdisplayMenu():
 def salesDetails():
     print('\nWelcome to Sales and Invoices module.')
     salesdisplayMenu()
+
+salesDetails()
+
 
