@@ -64,6 +64,7 @@ def displayMenu():
         except Exception as e:
             print(f'Failed to fetch customer details with exception: {e}')
     else:
+        print('Invalid choice. Redirecting to main menu')
         conn.close()
         commonFunctions.displayMenu()
 
