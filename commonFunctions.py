@@ -16,10 +16,10 @@ def displayMenu():
         import workersDetails 
         workersDetails.workerDetails()
     elif workflowNumber == 3:
-        import userDetails
+        import salesDetails
         salesDetails.salesDetails()
     elif workflowNumber == 4:
-        import salesDetails
+        import userDetails
         userDetails.userDetails()
     elif workflowNumber == 5:
         return "exit"

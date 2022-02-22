@@ -6,7 +6,7 @@ import userDetails
 
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-VU4ECPI;'
+                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
                           'Database=praneeth;'
                           'Trusted_Connection=yes;')
     cur = conn.cursor()
@@ -26,7 +26,7 @@ def generateInvoice():
             userDetails.displayMenu()
             return
         else:
-            item_choice = int(input('Select the item of you choice:\n1. Tv\n2. Stereo\n'))
+            item_choice = int(input('Available items \n1. Tv\n2. Stereo\nSelect the item of your choice: '))
             if item_choice == 1:
                 item_name = 'Tv' 
             elif item_choice == 2:
@@ -127,7 +127,6 @@ def closeInvoice(invoice_id=None, cursor = None):
         result = cursor.fetchall()
         if not result[0][0]:
             print('Invalid Invoice ID :(, Please try again')
-            salesd
             salesdisplayMenu()
             return
     else:
@@ -206,7 +205,6 @@ def salesdisplayMenu():
     elif option == 4:
         showClosedInvoices()
     else:
-        print('I am here')
         return commonFunctions.displayMenu()
     return "exit"
 
@@ -215,6 +213,5 @@ def salesDetails():
     print('\nWelcome to Sales and Invoices module.')
     salesdisplayMenu()
 
-salesDetails()
 
 
