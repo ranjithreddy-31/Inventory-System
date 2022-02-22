@@ -1,5 +1,4 @@
 from workersDetails import *
-from userDetails import *
 from wareHouse import *
 from salesDetails import *
 
@@ -119,7 +118,8 @@ def displayMenu():
     elif workflowNumber == 3:
         salesDetails()
     elif workflowNumber == 4:
-        userDetails()
+        import userDetails
+        userDetails.userDetails()
     elif workflowNumber == 5:
         return "exit"
     return "exit"
