@@ -1,9 +1,3 @@
-import workersDetails 
-import wareHouse 
-import userDetails 
-import salesDetails
-
-
 def displayMenu():
     print("-----------Menu-----------")
     print("1.Warehouse")
@@ -16,12 +10,16 @@ def displayMenu():
     workflowNumber = int(input("Enter the number to navigate: "))
 
     if workflowNumber == 1:
+        import wareHouse
         wareHouse.wareHouse()
     elif workflowNumber == 2:
+        import workersDetails 
         workersDetails.workerDetails()
     elif workflowNumber == 3:
+        import userDetails
         salesDetails.salesDetails()
     elif workflowNumber == 4:
+        import salesDetails
         userDetails.userDetails()
     elif workflowNumber == 5:
         return "exit"
