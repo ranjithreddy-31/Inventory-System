@@ -5,7 +5,7 @@ from prettytable import PrettyTable
 
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
+                          'Server=DESKTOP-VU4ECPI;'
                           'Database=praneeth;'
                           'Trusted_Connection=yes;')
     cur = conn.cursor()

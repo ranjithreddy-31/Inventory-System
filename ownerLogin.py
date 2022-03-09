@@ -10,7 +10,7 @@ regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{
 
 def getConnection():
     conn = pyodbc.connect('Driver={SQL Server};'
-                          'Server=DESKTOP-0BSMBQL\SQLEXPRESS;'
+                          'Server=DESKTOP-VU4ECPI;'
                           'Database=praneeth;'
                           'Trusted_Connection=yes;')
     cur = conn.cursor()
