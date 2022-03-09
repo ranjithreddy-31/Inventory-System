@@ -2,7 +2,7 @@ import commonFunctions
 from datetime import datetime
 import pyodbc
 from prettytable import PrettyTable
-import userDetails
+from userDetails import UserDetails
 class SalesDetails:
     def getConnection(self):
         conn = pyodbc.connect('Driver={SQL Server};'
@@ -19,10 +19,11 @@ class SalesDetails:
 
         try:
             cursor.execute(f"select * from customerDetails where customerID = {customer_id};")
-            result = cursor.fetchall()[0]
+            result = cursor.fetchall()
 
             if not result:
                 print('Customer has not registered yet. Please register before generating an invoice')
+                userDetails = UserDetails()
                 userDetails.displayMenu()
                 return
             else:
@@ -43,11 +44,12 @@ class SalesDetails:
                 warehouse = int(results[0][0])
                 product_quantity = int(results[0][1])
                 cursor.execute('select max(id) from invoiceDetails')
-                res = cursor.fetchall()[0]
-                if res[0]:
-                    max_id = int(res[0]) + 1
+                res = cursor.fetchall()
+                if res:
+                    max_id = int(res[0][0]) + 1
                 else:
                     max_id = 1
+                result = result[0]
                 name = result[1]
                 zip = int(result[2])
                 tax_rate = int(result[3])
@@ -215,7 +217,5 @@ class SalesDetails:
         print('\nWelcome to Sales and Invoices module.')
         self.salesdisplayMenu()
 
-s = SalesDetails()
-s.salesDetails()
 
 
