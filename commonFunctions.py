@@ -10,17 +10,21 @@ def displayMenu():
     workflowNumber = int(input("Enter the number to navigate: "))
 
     if workflowNumber == 1:
-        import wareHouse
-        wareHouse.wareHouse()
+        from wareHouse import WareHouse
+        warehouse = WareHouse()
+        warehouse.wareHouse()
     elif workflowNumber == 2:
-        import workersDetails 
-        workersDetails.workerDetails()
+        from workersDetails import WorkerDetails
+        workerdetails = WorkerDetails()
+        workerdetails.workerDetails()
     elif workflowNumber == 3:
-        import salesDetails
-        salesDetails.salesDetails()
+        from salesDetails import SalesDetails
+        salesdetails = SalesDetails()
+        salesdetails.salesDetails()
     elif workflowNumber == 4:
-        import userDetails
-        userDetails.userDetails()
+        from userDetails import UserDetails
+        userdetails = UserDetails()
+        userdetails.userDetails()
     elif workflowNumber == 5:
         return "exit"
     return "exit"
